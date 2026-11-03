@@ -67,7 +67,7 @@ The page shows:
 
 ### Entries
 
-Paid orders earn entries once the `LuckyDraw-Entries` job sees them. Free entries count the same.
+Paid orders earn entries once the `Entries` step of `LuckyDraw-Job` sees them. Free entries count the same.
 
 An order outside the campaign period, or with a billing address outside the eligible regions, earns no entry. The job status counts the reasons, for example `{"region":2,"outside-campaign":1}`.
 
@@ -75,7 +75,7 @@ An order outside the campaign period, or with a billing address outside the elig
 
 ### A verifiable draw
 
-The `LuckyDraw-Draw` job works in three steps:
+The `Draw` step of `LuckyDraw-Job` works in three steps:
 1. It commits to a secret seed before the draw.
 2. It hashes the snapshot of entries.
 3. It selects winners with `ld-hmac-sha256-v1` and seals the result.
@@ -88,7 +88,7 @@ The `LuckyDraw-Draw` job works in three steps:
 
 ### Rewards
 
-After **Confirm eligibility**, the `LuckyDraw-Rewards` job issues a single-use code from the prize coupon. Only the winner sees it, under **My rewards**.
+After **Confirm eligibility**, the `Rewards` step of `LuckyDraw-Job` issues a single-use code from the prize coupon. Only the winner sees it, under **My rewards**.
 
 ![My entries and the won reward](docs/images/luckydraw-my-entries.png)
 
@@ -139,6 +139,12 @@ Another shopper cannot use the code.
 
 The full procedure is in [DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
+## Background job
+
+All background work runs in one Business Manager job, `LuckyDraw-Job`, with its steps in order. Steps that run less often than the job keep their own timing with `RunEveryMinutes` or `RunAtHourUTC`, and finish `NOT_DUE` when skipped. A failing step doesn't stop the next one, and the last step, `ReportFailures`, then marks the job `ERROR`.
+
+Upgrading from a version with several jobs? Import `metadata/retired-jobs/jobs.xml` once to delete the old ones.
+
 ## Production blockers
 
 All are open. They are explained in [SECURITY.md](docs/SECURITY.md#production-blockers).
@@ -148,4 +154,4 @@ All are open. They are explained in [SECURITY.md](docs/SECURITY.md#production-bl
 3. **Winner verification process.** Decide whether to use affidavits, identity and age checks, and how to collect tax forms. Keep `requireWinnerVerification` on until that process exists.
 4. **Randomness source.** For high-value prizes, decide whether a third-party draw service or a public randomness beacon is required (`randomSource = EXTERNAL`, hook `app.plugin.luckydraw.randomness`).
 5. **Scale.** For campaigns that may exceed `luckyDrawMaxSnapshotEntries` entries per draw, or custom object quotas, use an external campaign store (see [ARCHITECTURE.md](docs/ARCHITECTURE.md#limitations)).
-6. **Sandbox verification.** L1 to L4, L7 and L8 passed on `zyeu-002` on 2026-10-27, and all nine jobs ran OK. L5, L6, L9 and L10 remain open; see [TESTING.md](docs/TESTING.md#sandbox-verification-plan).
+6. **Sandbox verification.** L1 to L4, L7 and L8 passed on `zyeu-002` on 2026-10-27, and all nine tasks ran OK, then as separate jobs. L5, L6, L9 and L10 remain open; see [TESTING.md](docs/TESTING.md#sandbox-verification-plan).

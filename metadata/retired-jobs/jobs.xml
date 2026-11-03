@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jobs xmlns="http://www.demandware.com/xml/impex/jobs/2015-07-01">
+    <job job-id="LuckyDraw-Status" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="LuckyDraw-Entries" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="LuckyDraw-Reconcile" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="LuckyDraw-Draw" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="LuckyDraw-Verify" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="LuckyDraw-Rewards" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="LuckyDraw-Notifications" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="LuckyDraw-Cleanup" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="LuckyDraw-AuditExport" mode="delete">
+        <triggers/>
+    </job>
+</jobs>
